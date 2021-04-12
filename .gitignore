@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# my stuff
+pretty_dummy.txt
+_graveyard.py
