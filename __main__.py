@@ -1,6 +1,6 @@
-import utils
-from server import NVEServer
-from nmap_scanner import NmapScanner
+from src.server import NVEServer
+from src.nmap_scanner import NmapScanner
 
 scanner = NmapScanner()
-NVEServer.start(scanner)
+server = NVEServer(scanner)
+server.start()

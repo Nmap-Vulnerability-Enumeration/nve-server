@@ -1,3 +1,5 @@
+import json
+
 class Device:
     '''
     Device class represents the devices discovered by the scanner.
@@ -102,3 +104,24 @@ class Device:
             return None
         else:
             return vendor
+
+class DeviceEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Device):
+            return {
+                "_type": "Device",
+                "value": {
+                    "hostname": o.hostname,
+                    "ip": o.ip,
+                    "mac": o.mac,
+                    "os": o.os,
+                    "status": o.status,
+                    "ports": o.ports,
+                    "uptime": o.uptime,
+                    "vendor": o.vendor,
+                    "vuln": o.vulnerabilities
+                }
+            }
+
+        else:
+            return super().default(o)
