@@ -34,7 +34,7 @@ class Device:
                     Device._get_os(_dict["osmatch"]),
                     _dict["status"],
                     _dict["portused"],
-                    _dict["uptime"]["seconds"],
+                    _dict["uptime"]["seconds"] if "uptime" in _dict else None,
                     Device._get_vendor(_dict["vendor"]) if "vendor" in _dict else None
                 )
     
@@ -73,12 +73,12 @@ class Device:
         estimate = osmatch[0]
         
         for os in osmatch:
-            if estimate["accuracy"] < os["accuracy"]:
+            if int(estimate["accuracy"]) < int(os["accuracy"]):
                 estimate = os
         
         ret = dict()
         ret["name"] = estimate["name"]
-        ret["accuracy"] = estimate["accuracy"]
+        ret["accuracy"] = int(estimate["accuracy"])
         ret["osclass"] = Device._get_os_details(estimate["osclass"])
 
         return ret
@@ -88,13 +88,14 @@ class Device:
         max_accuracy = -1
         classes = dict()
         for _class in osclass:
-            if _class["accuracy"] not in classes:
-                classes[_class["accuracy"]] = [_class]
+            accuracy = int(_class["accuracy"])
+            if accuracy not in classes:
+                classes[accuracy] = [_class]
             else:
-                classes[_class["accuracy"]].append(_class)
+                classes[accuracy].append(_class)
             
-            if max_accuracy < _class["accuracy"]:
-                max_accuracy = _class["accuracy"]
+            if max_accuracy < accuracy:
+                max_accuracy = accuracy
         
         return classes[max_accuracy]
 

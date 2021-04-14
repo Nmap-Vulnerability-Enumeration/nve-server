@@ -25,7 +25,7 @@ class NmapScanner:
         self.vulns = dict()
         self.last_update = None
 
-        self._default_ip = _default_ip if _default_ip != None else utils.get_my_external_ip()
+        self._default_ip = default_ip if default_ip != None else utils.get_my_external_ip()
         self._default_snet_mask = default_snet_mask if default_snet_mask != None else 20
 
 
@@ -34,7 +34,7 @@ class NmapScanner:
         mask = str(snet_mask) if snet_mask != None else str(self._default_snet_mask)
         args = arguments if arguments != None else self._construct_args()
 
-        devices = self._parse_devices(self._scanner.scan(hosts = "%s/%s" % (my_ip, mask), arguments = args, sudo = sudo))
+        devices = self._parse_devices(self._scanner.scan(hosts = "%s/%s" % (my_ip, mask), arguments = args, sudo = sudo)["scan"])
         vulns = self._fetch_vulns(devices)
 
         if cache:
@@ -80,3 +80,16 @@ class NmapScanner:
             
             self._search_params[key]["active"] = args[key]["active"]
             self._search_params[key]["value"] = args[key]["value"]
+    
+    def _parse_devices(self, nmap_output):
+        container = dict()
+        for key in nmap_output:
+            container[key] = Device.from_nmap(nmap_output[key], key)
+
+        return container
+    
+    def _fetch_vulns(self, devices):
+        container = dict()
+
+
+        return container
