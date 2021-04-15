@@ -1,6 +1,6 @@
 import flask
-from flask import request, jsonify
 
+from flask import request, jsonify
 from nmap_scanner import NmapScanner
 
 # Create some test data for our catalog in the form of a list of dictionaries.

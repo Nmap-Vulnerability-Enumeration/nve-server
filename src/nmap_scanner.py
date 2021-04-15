@@ -1,9 +1,9 @@
 import nmap
+import utils
 
 from datetime import datetime
 from device import Device
 from vulnerability import Vulnerability
-import utils
 
 class NmapScanner:
     _switchs = {
