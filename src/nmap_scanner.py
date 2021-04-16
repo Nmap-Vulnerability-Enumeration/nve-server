@@ -1,20 +1,22 @@
+import json
 import nmap
 import utils
 
 from datetime import datetime
-from device import Device
+from device import Device, DeviceEncoder
 from vulnerability import Vulnerability
 
 class NmapScanner:
     _switchs = {
-        "os_search" : "-O"
+        "os_search" : "-O",
+        "version_search": "-sV"
     }
 
     def __init__(self, default_ip = None, default_snet_mask = None):
         self._scanner = nmap.PortScanner()
         self._search_params = self._default_params()
 
-        self._search_params["os_search"]["active"] = True
+        self._set_default()
 
         self._cache = {
             "devices": dict(),
@@ -28,6 +30,9 @@ class NmapScanner:
         self._default_ip = default_ip if default_ip != None else utils.get_my_external_ip()
         self._default_snet_mask = default_snet_mask if default_snet_mask != None else 20
 
+    def _set_defualt(self):
+        self._search_params["os_search"]["active"] = True
+        self._search_params["version_search"]["active"] = True
 
     def run_scan(self, ip : str = None, snet_mask: int = None, arguments: str = None, sudo: bool = True, cache: bool = True):
         my_ip = ip if ip != None else self._default_ip
@@ -100,3 +105,8 @@ class NmapScanner:
         for device in devices:
             pass
         pass
+
+n = NmapScanner("10.1.64.0", 28)
+devices, _ = n.run_scan()
+with open("file.json", "w") as fp:
+    json.dump(devices, fp, cls = DeviceEncoder)

@@ -11,6 +11,7 @@ class Device:
                  OS: dict = None,
                  status: dict = None,
                  ports: list = None,
+                 tcp_ports: dict = None,
                  uptime: dict = None,
                  vendor: str = None,
                  vulnerabilities: list = None
@@ -21,6 +22,7 @@ class Device:
         self.os = OS
         self.status = status
         self.ports = ports
+        self.tcp_ports = tcp_ports
         self.uptime = uptime
         self.vendor = vendor
         self.vulnerabilities = vulnerabilities
@@ -34,6 +36,7 @@ class Device:
                     Device._get_os(_dict["osmatch"]),
                     _dict["status"],
                     _dict["portused"],
+                    _dict["tcp"] if "tcp" in _dict else None,
                     _dict["uptime"]["seconds"] if "uptime" in _dict else None,
                     Device._get_vendor(_dict["vendor"]) if "vendor" in _dict else None
                 )
@@ -118,6 +121,7 @@ class DeviceEncoder(json.JSONEncoder):
                     "os": o.os,
                     "status": o.status,
                     "ports": o.ports,
+                    "tcp": o.tcp_ports,
                     "uptime": o.uptime,
                     "vendor": o.vendor,
                     "vuln": o.vulnerabilities
