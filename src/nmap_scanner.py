@@ -93,3 +93,10 @@ class NmapScanner:
 
 
         return container
+    
+    def _collect_services(self, devices):
+        services = dict() # service cpe:[discovery ip]
+
+        for device in devices:
+            pass
+        pass
