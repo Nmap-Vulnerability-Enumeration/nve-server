@@ -6,8 +6,8 @@ import requests
 
 from vulnerability import Vulnerability
 
-NIST_CVE_BASE_URL = "https://services.nvd.nist.gov/rest/json/cve/1.0/"
-NIST_DB_BASE_URL = "https://services.nvd.nist.gov/rest/json/cves/1.0"
+NIST_CVE_BASE_URL  = "https://services.nvd.nist.gov/rest/json/cve/1.0/"
+NIST_DB_BASE_URL   = "https://services.nvd.nist.gov/rest/json/cves/1.0"
 NIST_MAX_PAGE_SIZE = 5000
 # NIST_JSON_SCHEMA = None
 # NIS_CVE_SCHEMA = None
@@ -61,10 +61,10 @@ def query_nist_cve(params: dict):
             return {}
         
         if response["resultsPerPage"] < response["totalResults"] and "resultsPerPage" not in response:
-            params["resultsPerPage"] = max(response["totalResults"], NIST_MAX_PAGE_SIZE)
+            params["resultsPerPage"] = min(response["totalResults"], NIST_MAX_PAGE_SIZE)
             return query_nist_cve(params)
         else:
-            return response # parse_nist_response(response)
+            return parse_nist_response(response)
     
     elif req.status_code == 404:
         print("err")
@@ -73,14 +73,14 @@ def query_nist_cve(params: dict):
     else:
         req.raise_for_status()
 
-def cpe_match(cpe_l, cpe_r):
-    def convert_to_cpe23(cpe):
-        cpe_elements = cpe.split(":")
-        version = cpe_elements.pop(4) if len(cpe_elements) > 4 else ""
-        cpe_elements[1] = cpe_elements[1][1:]
-        cpe_elements.insert(1, version)
-        return ":".join(cpe_elements)
+def convert_to_cpe23(cpe):
+    cpe_elements = cpe.split(":")
+    version = cpe_elements.pop(4) if len(cpe_elements) > 4 else ""
+    cpe_elements[1] = cpe_elements[1][1:]
+    cpe_elements.insert(1, version)
+    return ":".join(cpe_elements)
 
+def cpe_match(cpe_l, cpe_r):
     cpe_l_23 = convert_to_cpe23(cpe_l) if "/" in cpe_l else cpe_l
     cpe_r_23 = convert_to_cpe23(cpe_r) if "/" in cpe_r else cpe_r
 
@@ -88,3 +88,28 @@ def cpe_match(cpe_l, cpe_r):
         return cpe_r_23.startswith(cpe_l_23)
     else:
         return cpe_l_23.startswith(cpe_r_23)
+
+def get_version(cpe):
+    return cpe.split(":")[4] if "/" in cpe else cpe.split(":")[1]
+
+def version_compare(version_l, version_r):
+    '''
+    The function comapres to semantic version strings.
+
+    Returns 0 if version_l and version_r represent the same version
+    
+    Returns 1 if version_l is higher than version_r
+    
+    Returns -1 if version_l is lower than version_r
+    '''
+    
+    ver_l = [int(x) for x in version_l.split(".")]
+    ver_r = [int(x) for x in version_r.split(".")]
+
+    for i in range(3):
+        if ver_l[i] > ver_r[i]:
+            return 1
+        elif ver_l[i] < ver_r[i]:
+            return -1
+    
+    return 0
