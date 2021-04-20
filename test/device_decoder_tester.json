@@ -1,0 +1,482 @@
+{
+    "10.1.64.1": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-64-1.ec2.internal",
+            "ip": {
+                "discovery": "10.1.64.1",
+                "ipv4": "10.1.64.1",
+                "ipv6": null
+            },
+            "mac": "0E:32:B4:5D:CE:0C",
+            "os": null,
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [],
+            "tcp": null,
+            "uptime": null,
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.64.2": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-64-2.ec2.internal",
+            "ip": {
+                "discovery": "10.1.64.2",
+                "ipv4": "10.1.64.2",
+                "ipv6": null
+            },
+            "mac": "0E:32:B4:5D:CE:0C",
+            "os": {
+                "name": "HP P2000 G3 NAS device",
+                "accuracy": 89,
+                "osclass": [
+                    {
+                        "type": "storage-misc",
+                        "vendor": "HP",
+                        "osfamily": "embedded",
+                        "osgen": null,
+                        "accuracy": "89",
+                        "cpe": [
+                            "cpe:/h:hp:p2000_g3"
+                        ]
+                    }
+                ]
+            },
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [
+                {
+                    "state": "open",
+                    "proto": "tcp",
+                    "portid": "53"
+                }
+            ],
+            "tcp": {
+                "53": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "domain",
+                    "product": "ISC BIND",
+                    "version": "",
+                    "extrainfo": "",
+                    "conf": "10",
+                    "cpe": "cpe:/a:isc:bind"
+                }
+            },
+            "uptime": "37063286",
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.67.163": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-67-163.ec2.internal",
+            "ip": {
+                "discovery": "10.1.67.163",
+                "ipv4": "10.1.67.163",
+                "ipv6": null
+            },
+            "mac": "0E:92:47:CA:2D:21",
+            "os": {
+                "name": "Linux 3.2 - 4.9",
+                "accuracy": 96,
+                "osclass": [
+                    {
+                        "type": "general purpose",
+                        "vendor": "Linux",
+                        "osfamily": "Linux",
+                        "osgen": "3.X",
+                        "accuracy": "96",
+                        "cpe": [
+                            "cpe:/o:linux:linux_kernel:3"
+                        ]
+                    },
+                    {
+                        "type": "general purpose",
+                        "vendor": "Linux",
+                        "osfamily": "Linux",
+                        "osgen": "4.X",
+                        "accuracy": "96",
+                        "cpe": [
+                            "cpe:/o:linux:linux_kernel:4"
+                        ]
+                    }
+                ]
+            },
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [
+                {
+                    "state": "open",
+                    "proto": "tcp",
+                    "portid": "21"
+                },
+                {
+                    "state": "closed",
+                    "proto": "tcp",
+                    "portid": "1"
+                },
+                {
+                    "state": "closed",
+                    "proto": "udp",
+                    "portid": "42031"
+                }
+            ],
+            "tcp": {
+                "21": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "ftp",
+                    "product": "vsftpd",
+                    "version": "2.0.8 or later",
+                    "extrainfo": "",
+                    "conf": "10",
+                    "cpe": "cpe:/a:vsftpd:vsftpd"
+                }
+            },
+            "uptime": "2627286",
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.67.187": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-67-187.ec2.internal",
+            "ip": {
+                "discovery": "10.1.67.187",
+                "ipv4": "10.1.67.187",
+                "ipv6": null
+            },
+            "mac": "0E:B0:32:F0:7F:E1",
+            "os": null,
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [],
+            "tcp": null,
+            "uptime": null,
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.74.88": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-74-88.ec2.internal",
+            "ip": {
+                "discovery": "10.1.74.88",
+                "ipv4": "10.1.74.88",
+                "ipv6": null
+            },
+            "mac": "0E:D8:EF:6F:FE:8B",
+            "os": null,
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [],
+            "tcp": null,
+            "uptime": null,
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.76.22": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-76-22.ec2.internal",
+            "ip": {
+                "discovery": "10.1.76.22",
+                "ipv4": "10.1.76.22",
+                "ipv6": null
+            },
+            "mac": "0E:CE:EF:44:25:C9",
+            "os": null,
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [],
+            "tcp": null,
+            "uptime": null,
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.76.252": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-76-252.ec2.internal",
+            "ip": {
+                "discovery": "10.1.76.252",
+                "ipv4": "10.1.76.252",
+                "ipv6": null
+            },
+            "mac": "0E:23:1D:E6:5A:35",
+            "os": null,
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [],
+            "tcp": null,
+            "uptime": null,
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.79.87": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-79-87.ec2.internal",
+            "ip": {
+                "discovery": "10.1.79.87",
+                "ipv4": "10.1.79.87",
+                "ipv6": null
+            },
+            "mac": "0E:BD:29:BD:FF:43",
+            "os": {
+                "name": "Linux 3.2 - 4.9",
+                "accuracy": 96,
+                "osclass": [
+                    {
+                        "type": "general purpose",
+                        "vendor": "Linux",
+                        "osfamily": "Linux",
+                        "osgen": "3.X",
+                        "accuracy": "96",
+                        "cpe": [
+                            "cpe:/o:linux:linux_kernel:3"
+                        ]
+                    },
+                    {
+                        "type": "general purpose",
+                        "vendor": "Linux",
+                        "osfamily": "Linux",
+                        "osgen": "4.X",
+                        "accuracy": "96",
+                        "cpe": [
+                            "cpe:/o:linux:linux_kernel:4"
+                        ]
+                    }
+                ]
+            },
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [
+                {
+                    "state": "open",
+                    "proto": "tcp",
+                    "portid": "80"
+                },
+                {
+                    "state": "closed",
+                    "proto": "tcp",
+                    "portid": "1"
+                },
+                {
+                    "state": "closed",
+                    "proto": "udp",
+                    "portid": "43727"
+                }
+            ],
+            "tcp": {
+                "80": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "http",
+                    "product": "Apache httpd",
+                    "version": "2.4.25",
+                    "extrainfo": "(Debian)",
+                    "conf": "10",
+                    "cpe": "cpe:/a:apache:http_server:2.4.25"
+                }
+            },
+            "uptime": "814657",
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.79.206": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-79-206.ec2.internal",
+            "ip": {
+                "discovery": "10.1.79.206",
+                "ipv4": "10.1.79.206",
+                "ipv6": null
+            },
+            "mac": "0E:62:63:96:A9:95",
+            "os": {
+                "name": "Linux 3.10 - 3.13",
+                "accuracy": 100,
+                "osclass": [
+                    {
+                        "type": "general purpose",
+                        "vendor": "Linux",
+                        "osfamily": "Linux",
+                        "osgen": "3.X",
+                        "accuracy": "100",
+                        "cpe": [
+                            "cpe:/o:linux:linux_kernel:3"
+                        ]
+                    }
+                ]
+            },
+            "status": {
+                "state": "up",
+                "reason": "arp-response"
+            },
+            "ports": [
+                {
+                    "state": "open",
+                    "proto": "tcp",
+                    "portid": "22"
+                },
+                {
+                    "state": "closed",
+                    "proto": "tcp",
+                    "portid": "1"
+                },
+                {
+                    "state": "closed",
+                    "proto": "udp",
+                    "portid": "36775"
+                }
+            ],
+            "tcp": {
+                "22": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "ssh",
+                    "product": "OpenSSH",
+                    "version": "7.2p2 Ubuntu 4ubuntu2.1",
+                    "extrainfo": "Ubuntu Linux; protocol 2.0",
+                    "conf": "10",
+                    "cpe": "cpe:/o:linux:linux_kernel"
+                },
+                "80": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "http",
+                    "product": "Apache httpd",
+                    "version": "2.4.18",
+                    "extrainfo": "",
+                    "conf": "10",
+                    "cpe": "cpe:/a:apache:http_server:2.4.18"
+                },
+                "139": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "netbios-ssn",
+                    "product": "Samba smbd",
+                    "version": "3.X - 4.X",
+                    "extrainfo": "workgroup: MYGROUP",
+                    "conf": "10",
+                    "cpe": "cpe:/a:samba:samba"
+                },
+                "445": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "netbios-ssn",
+                    "product": "Samba smbd",
+                    "version": "3.X - 4.X",
+                    "extrainfo": "workgroup: MYGROUP",
+                    "conf": "10",
+                    "cpe": "cpe:/a:samba:samba"
+                }
+            },
+            "uptime": "2267",
+            "vendor": null,
+            "vulns": null
+        }
+    },
+    "10.1.66.239": {
+        "_type": "Device",
+        "value": {
+            "hostname": "ip-10-1-66-239.ec2.internal",
+            "ip": {
+                "discovery": "10.1.66.239",
+                "ipv4": "10.1.66.239",
+                "ipv6": null
+            },
+            "mac": null,
+            "os": {
+                "name": "Linux 2.6.32",
+                "accuracy": 99,
+                "osclass": [
+                    {
+                        "type": "general purpose",
+                        "vendor": "Linux",
+                        "osfamily": "Linux",
+                        "osgen": "2.6.X",
+                        "accuracy": "99",
+                        "cpe": [
+                            "cpe:/o:linux:linux_kernel:2.6.32"
+                        ]
+                    }
+                ]
+            },
+            "status": {
+                "state": "up",
+                "reason": "localhost-response"
+            },
+            "ports": [
+                {
+                    "state": "open",
+                    "proto": "tcp",
+                    "portid": "22"
+                },
+                {
+                    "state": "closed",
+                    "proto": "tcp",
+                    "portid": "1"
+                },
+                {
+                    "state": "closed",
+                    "proto": "udp",
+                    "portid": "36475"
+                }
+            ],
+            "tcp": {
+                "22": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "ssh",
+                    "product": "OpenSSH",
+                    "version": "8.3p1 Debian 1",
+                    "extrainfo": "protocol 2.0",
+                    "conf": "10",
+                    "cpe": "cpe:/o:linux:linux_kernel"
+                },
+                "3389": {
+                    "state": "open",
+                    "reason": "syn-ack",
+                    "name": "ms-wbt-server",
+                    "product": "xrdp",
+                    "version": "",
+                    "extrainfo": "",
+                    "conf": "10",
+                    "cpe": "cpe:/a:jay_sorg:xrdp"
+                }
+            },
+            "uptime": "2406575",
+            "vendor": null,
+            "vulns": null
+        }
+    }
+}

@@ -114,6 +114,12 @@ class Device:
         else:
             return vendor
 
+    def __eq__(self, value):
+        if not isinstance(value, Device):
+            return False
+
+        return self.mac == value.mac
+
     def get_all_cpes(self):
         container = dict()
 
@@ -142,15 +148,16 @@ class Device:
 
         return container
 
-    def get_vulns(self, update=True):
-        cpes = self.get_all_cpes()
+    def get_vulns(self):
+        if self.vluns == None:
+            cpes = self.get_all_cpes()
 
-        vulns = self._get_os_vulns(cpes)
-        vulns.update(self._get_service_vulns(cpes))
+            vulns = self._get_os_vulns(cpes)
+            vulns.update(self._get_service_vulns(cpes))
 
-        if update:
             self.vulns = vulns
-        return vulns
+
+        return self.vulns
 
     def _get_os_vulns(self, cpes):
         if self.os == None:
@@ -198,9 +205,35 @@ class DeviceEncoder(json.JSONEncoder):
                     "tcp": o.tcp_ports,
                     "uptime": o.uptime,
                     "vendor": o.vendor,
-                    "vuln": o.vulns
+                    "vulns": o.vulns
                 }
             }
 
         else:
             return super().default(o)
+
+
+class DeviceDecoder(json.JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        json.JSONDecoder.__init__(
+            self, object_hook=self.object_hook, *args, **kwargs)
+
+    def object_hook(self, obj):
+        if "_type" not in obj:
+            return obj
+        type = obj["_type"]
+        if type == "Device":
+            data = obj["value"]
+            return Device(
+                ip=data["ip"],
+                mac=data["mac"],
+                name=data["hostname"],
+                OS=data["os"],
+                status=data["status"],
+                ports=data["ports"],
+                tcp_ports=data["tcp"],
+                uptime=data["uptime"],
+                vendor=data["vendor"],
+                vulnerabilities=data["vulns"]
+            )
+        return obj
