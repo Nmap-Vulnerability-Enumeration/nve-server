@@ -18,11 +18,9 @@ class NmapScanner:
 
         self._set_default()
 
-        self._cache = {
-            "devices": dict(),
-            "vulns": dict(),
-            "updated": None
-        }
+        self._devices = dict()
+        self._devices_updated = None
+
         self.devices = dict()
         self.vulns = dict()
         self.last_update = None
@@ -39,13 +37,12 @@ class NmapScanner:
         mask = str(snet_mask) if snet_mask != None else str(self._default_snet_mask)
         args = arguments if arguments != None else self._construct_args()
 
-        devices = self._parse_devices(self._scanner.scan(hosts = "%s/%s" % (my_ip, mask), arguments = args, sudo = sudo)["scan"])
-        vulns = self._fetch_vulns(devices)
+        nmap_scan = self._scanner.scan(hosts = "%s/%s" % (my_ip, mask), arguments = args, sudo = sudo)["scan"]
+        devices = self._extract_devices(nmap_scan)
 
         if cache:
-            self._cache["devices"] = devices
-            self._cache["vulns"] = vulns
-            self._cache["updated"] = datetime.now()
+            self._devices = devices
+            self._devices_updated = datetime.now()
         
         return devices, vulns
 
@@ -86,27 +83,46 @@ class NmapScanner:
             self._search_params[key]["active"] = args[key]["active"]
             self._search_params[key]["value"] = args[key]["value"]
     
-    def _parse_devices(self, nmap_output):
+    def _extract_devices(self, nmap_output):
         container = dict()
         for key in nmap_output:
             container[key] = Device.from_nmap(nmap_output[key], key)
 
         return container
+
+    # def _collect_services(self, devices):
+    #     services = dict() # service cpe:[discovery ip]
+    #     for device in devices:
+    #         pass
+    #     pass
+
+    def get_all_devices(self, refresh = False):
+        if self._devices_updated == None:
+            print("Warning: network hasn't been scanned yet. Using defualt ip and subnet mask to run a scan")
+            self.refresh()
+        elif refresh:
+            self.refresh()
+
+        return self._devices
     
-    def _fetch_vulns(self, devices):
-        container = dict()
+    def get_device(self, discovery_ip: str, refresh = False):
+        if self._devices_updated == None:
+            print("Warning: network hasn't been scanned yet. Using defualt ip and subnet mask to run a scan")
+            self.refresh()
+        elif refresh:
+            self.refresh()
 
-
-        return container
+        if discovery_ip not in self._devices:
+            raise ValueError("Device \"%s\" not found. Please provide a valid ipv4 string and/or set refresh to True" % discovery_ip)
     
-    def _collect_services(self, devices):
-        services = dict() # service cpe:[discovery ip]
+        return self._devices[discovery_ip]
 
-        for device in devices:
-            pass
-        pass
+    def get_device_vuln(self, discovery_ip: str, refresh = False):
+        device = self.get_device(discovery_ip, refresh)
+        return device.get_vulns()
+
 
 n = NmapScanner("10.1.64.0", 28)
 devices, _ = n.run_scan()
-with open("file.json", "w") as fp:
+with open("jargon/file.json", "w") as fp:
     json.dump(devices, fp, cls = DeviceEncoder)

@@ -6,7 +6,6 @@ class Device:
     '''
     Device class represents the devices discovered by the scanner.
     '''
-
     def __init__(self,
                  ip: dict,
                  mac: str = None,
@@ -224,6 +223,12 @@ class DeviceDecoder(json.JSONDecoder):
         type = obj["_type"]
         if type == "Device":
             data = obj["value"]
+
+            if data["tcp"] == None:
+                tcp_data = None
+            else:
+                tcp_data = {int(port) : value for (port, value) in data["tcp"].items()}
+
             return Device(
                 ip=data["ip"],
                 mac=data["mac"],
@@ -231,7 +236,7 @@ class DeviceDecoder(json.JSONDecoder):
                 OS=data["os"],
                 status=data["status"],
                 ports=data["ports"],
-                tcp_ports=data["tcp"],
+                tcp_ports=tcp_data,
                 uptime=data["uptime"],
                 vendor=data["vendor"],
                 vulnerabilities=data["vulns"]
