@@ -69,11 +69,7 @@ def query_nist_cve(params: dict):
                 response["totalResults"], NIST_MAX_PAGE_SIZE)
             return query_nist_cve(params)
         else:
-            return response  # parse_nist_response(response)
-
-    elif req.status_code == 404:
-        print("err")
-        return None
+            return parse_nist_response(response)
 
     else:
         req.raise_for_status()

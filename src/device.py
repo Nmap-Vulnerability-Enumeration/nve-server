@@ -40,10 +40,15 @@ class Device:
         vendor = Device._get_vendor(
             _dict["vendor"]) if "vendor" in _dict else None
 
-        return Device(ip, mac, name, os, _dict["status"],
-                      _dict["portused"], tcp_ports,
-                      _dict["uptime"]["seconds"] if "uptime" in _dict else None,
-                      vendor)
+        return Device(ip = ip,
+                      mac = mac,
+                      name = name,
+                      OS = os,
+                      statis = _dict["status"],
+                      ports = _dict["portused"],
+                      tcp_ports = tcp_ports,
+                      uptime = _dict["uptime"]["seconds"] if "uptime" in _dict else None,
+                      vendor = vendor)
 
     @staticmethod
     def _get_ips(addresses, discovery_ip):
@@ -135,20 +140,22 @@ class Device:
                 else:
                     version = ver_list[0]
                 cpe += ":" + version
+            if cpe in container:
+                container[cpe].append(int(port))
             else:
-                container[cpe] = int(port)
+                container[cpe] = [int(port)]
 
         # get os cpe
         if self.os != None:
             for os_class in self.os["osclass"]:
                 if "cpe" in os_class and len(os_class["cpe"]) > 0:
                     for cpe in os_class["cpe"]:
-                        container["cpe"] = -1  # -1 port indicates an OS cpe
+                        container[cpe] = -1  # -1 port indicates an OS cpe
 
         return container
 
     def get_vulns(self):
-        if self.vluns == None:
+        if self.vulns == None:
             cpes = self.get_all_cpes()
 
             vulns = self._get_os_vulns(cpes)
@@ -169,8 +176,12 @@ class Device:
         cves = utils.query_nist_cve(params)
         if cves == None:
             return dict()
+        vulns = dict()
+        for cve in cves:
+            if cves[cve].is_vulnerable(self):
+                vulns[cve] = cves[cve]
 
-        return {cve_num: vuln for (cve_num, vuln) in cves if vuln.is_vulnerable(self)}
+        return vulns
 
     def _get_service_vulns(self, cpes):
         if len(self.tcp_ports) == 0:
@@ -185,8 +196,11 @@ class Device:
         cves = utils.query_nist_cve(params)
         if cves == None:
             return dict()
-
-        return {cve_num: vuln for (cve_num, vuln) in cves if vuln.is_vulnerable(self)}
+        vulns = dict()
+        for cve in cves:
+            if cves[cve].is_vulnerable(self):
+                vulns[cve] = cves[cve]
+        return vulns
 
 
 class DeviceEncoder(json.JSONEncoder):
@@ -225,7 +239,7 @@ class DeviceDecoder(json.JSONDecoder):
             data = obj["value"]
 
             if data["tcp"] == None:
-                tcp_data = None
+                tcp_data = dict()
             else:
                 tcp_data = {int(port) : value for (port, value) in data["tcp"].items()}
 
