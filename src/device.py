@@ -218,7 +218,7 @@ class DeviceEncoder(json.JSONEncoder):
                     "tcp": o.tcp_ports,
                     "uptime": o.uptime,
                     "vendor": o.vendor,
-                    "vulns": o.vulns
+                    "vulns": list(o.vulns.keys()) if o.vulns != None else None
                 }
             }
 
