@@ -170,7 +170,8 @@ class Device:
             return dict()
         os_cpe = [cpe for (cpe, port) in cpes.items() if port == -1]
         params = {
-            "cpeMatchString": os_cpe
+            "cpeMatchString": os_cpe,
+            "resultsPerPage": 100
         }
 
         cves = utils.query_nist_cve(params)
