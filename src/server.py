@@ -44,13 +44,16 @@ class NVEServer:
         def setup_scanner():
             print(request.form)
             if "deviceIP" not in request.form or "subnet" not in request.form:
-                return "Error: please provide deviceIP and subnet"
+                data = {'message': "Error: please provide deviceIP and subnet"}
+                return make_response(jsonify(data), 400)
             
             if self._scanner == None:
                 self._scanner = NmapScanner(default_ip=request.form["deviceIP"],
                                             default_snet_mask=request.form["subnet"])
             else:
-                return "Error: scanner already set up"
+                data = {'message': "Error: scanner already set up"}
+                return make_response(jsonify(data), 500)
+
 
             data = {'message': 'Created', 'code': 'SUCCESS'}
             return make_response(jsonify(data), 201)
@@ -62,7 +65,8 @@ class NVEServer:
                 devices = self._scanner.get_all_devices()
                 return jsonify(books, cls = device.DeviceEncoder)
             except:
-                return "Error"
+                data = {'message': "Error"}
+                return make_response(jsonify(data), 500)
 
         @app.route('/api/v1/device', methods=['GET'])
         def api_device_discovery_ip():
@@ -79,7 +83,8 @@ class NVEServer:
                     except:
                         pass
             else:
-                return "Error: No discovery_id field provided. Please specify an discovery_id."
+                data = {'message': "Error: No discovery_id field provided. Please specify an discovery_id."}
+                return make_response(jsonify(data), 401)
 
             # Create an empty list for our results
             results = []
