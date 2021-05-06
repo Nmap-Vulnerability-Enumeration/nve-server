@@ -1,9 +1,9 @@
-import device
+import src.device as device
 import flask
-import vulnerability
+import src.vulnerability as vulnerability
 
-from flask import request, jsonify
-from nmap_scanner import NmapScanner
+from flask import request, jsonify, make_response
+from src.nmap_scanner import NmapScanner
 
 # Create some test data for our catalog in the form of a list of dictionaries.
 books = [
@@ -42,6 +42,7 @@ class NVEServer:
 
         @app.route("/api/v1/setup", methods=["POST"])
         def setup_scanner():
+            print(request.form)
             if "deviceIP" not in request.form or "subnet" not in request.form:
                 return "Error: please provide deviceIP and subnet"
             
@@ -50,6 +51,9 @@ class NVEServer:
                                             default_snet_mask=request.form["subnet"])
             else:
                 return "Error: scanner already set up"
+
+            data = {'message': 'Created', 'code': 'SUCCESS'}
+            return make_response(jsonify(data), 201)
 
         # A route to return all of the available entries in our catalog.
         @app.route('/api/v1/devices/all', methods=['GET'])

@@ -1,5 +1,5 @@
 import json
-import utils
+import src.utils as utils
 
 
 class Device:

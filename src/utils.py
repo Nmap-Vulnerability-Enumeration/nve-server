@@ -4,7 +4,7 @@ import os
 import pprint
 import requests
 
-from vulnerability import Vulnerability
+from src.vulnerability import Vulnerability
 
 NIST_CVE_BASE_URL = "https://services.nvd.nist.gov/rest/json/cve/1.0"
 NIST_DB_BASE_URL = "https://services.nvd.nist.gov/rest/json/cves/1.0"
