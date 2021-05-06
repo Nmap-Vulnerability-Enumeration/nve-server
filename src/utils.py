@@ -4,6 +4,7 @@ import os
 import pprint
 import requests
 
+from cpe import CPE
 from src.vulnerability import Vulnerability
 
 NIST_CVE_BASE_URL = "https://services.nvd.nist.gov/rest/json/cve/1.0"
@@ -82,15 +83,15 @@ def convert_to_cpe23(cpe):
     cpe_elements.insert(1, version)
     return ":".join(cpe_elements)
 
-
 def cpe_match(cpe_l, cpe_r):
-    cpe_l_23 = convert_to_cpe23(cpe_l) if "/" in cpe_l else cpe_l
-    cpe_r_23 = convert_to_cpe23(cpe_r) if "/" in cpe_r else cpe_r
+    cpe_l_23 = CPE(cpe_l) # convert_to_cpe23(cpe_l) if "/" in cpe_l else cpe_l
+    cpe_r_23 = CPE(cpe_r) # convert_to_cpe23(cpe_r) if "/" in cpe_r else cpe_r
 
-    if len(cpe_l_23) < len(cpe_r_23):
-        return cpe_r_23.startswith(cpe_l_23)
-    else:
-        return cpe_l_23.startswith(cpe_r_23)
+    # if len(cpe_l_23) < len(cpe_r_23):
+    #     return cpe_r_23.startswith(cpe_l_23)
+    # else:
+    #     return cpe_l_23.startswith(cpe_r_23)
+    return cpe_l_23 == cpe_r_23
 
 
 def get_version(cpe):
