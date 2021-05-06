@@ -1,10 +1,10 @@
 import json
 import nmap
-import utils
+import src.utils as utils
 
 from datetime import datetime
-from device import Device, DeviceEncoder
-from vulnerability import Vulnerability
+from src.device import Device, DeviceEncoder
+from src.vulnerability import Vulnerability
 
 class NmapScanner:
     _switchs = {
@@ -37,14 +37,16 @@ class NmapScanner:
         mask = str(snet_mask) if snet_mask != None else str(self._default_snet_mask)
         args = arguments if arguments != None else self._construct_args()
 
+        print("ip: %s\nsubnet:%s\nargs: %s" % (my_ip, mask, args))
         nmap_scan = self._scanner.scan(hosts = "%s/%s" % (my_ip, mask), arguments = args, sudo = sudo)["scan"]
+        print("scan complete")
         devices = self._extract_devices(nmap_scan)
-
+        print("devices extracted - count: ", len(devices))
         if cache:
             self._devices = devices
             self._devices_updated = datetime.now()
         
-        return devices, vulns
+        return devices
 
     def refresh(self):
         self.run_scan()
@@ -85,6 +87,7 @@ class NmapScanner:
     
     def _extract_devices(self, nmap_output):
         container = dict()
+        print(nmap_output)
         for key in nmap_output:
             container[key] = Device.from_nmap(nmap_output[key], key)
 
@@ -103,6 +106,7 @@ class NmapScanner:
         elif refresh:
             self.refresh()
 
+        print("refresh done")
         return self._devices
     
     def get_device(self, discovery_ip: str, refresh = False):

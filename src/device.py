@@ -1,5 +1,5 @@
 import json
-import utils
+import src.utils as utils
 
 
 class Device:
@@ -44,7 +44,7 @@ class Device:
                       mac = mac,
                       name = name,
                       OS = os,
-                      statis = _dict["status"],
+                      status = _dict["status"],
                       ports = _dict["portused"],
                       tcp_ports = tcp_ports,
                       uptime = _dict["uptime"]["seconds"] if "uptime" in _dict else None,
