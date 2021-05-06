@@ -1,4 +1,6 @@
+import device
 import flask
+import vulnerability
 
 from flask import request, jsonify
 from nmap_scanner import NmapScanner
@@ -25,12 +27,11 @@ books = [
 class NVEServer:
     def __init__(self, nmap_scanner: NmapScanner = None):
         self._scanner = nmap_scanner
-        self._results_cache = {
-            "devices": None,
-            "vuln": None,
-            "last_update": None
-        }
+        self._num_requests = 0
 
+    def increment_req(self):
+        self._num_requests += 1
+    
     def start(self):
         app = flask.Flask(__name__)
         app.config["DEBUG"] = True
@@ -39,20 +40,42 @@ class NVEServer:
         def home():
             return "<h1>Distant Reading Archive</h1><p>This site is a prototype API for distant reading of science fiction novels.</p>"
 
+        @app.route("/api/v1/setup", methods=["POST"])
+        def setup_scanner():
+            if "deviceIP" not in request.form or "subnet" not in request.form:
+                return "Error: please provide deviceIP and subnet"
+            
+            if self._scanner == None:
+                self._scanner = NmapScanner(default_ip=request.form["deviceIP"],
+                                            default_snet_mask=request.form["subnet"])
+            else:
+                return "Error: scanner already set up"
+
         # A route to return all of the available entries in our catalog.
         @app.route('/api/v1/devices/all', methods=['GET'])
-        def api_all():
-            return jsonify(books)
+        def api_device_all():
+            try:
+                devices = self._scanner.get_all_devices()
+                return jsonify(books, cls = device.DeviceEncoder)
+            except:
+                return "Error"
 
-        @app.route('/api/v1/devices', methods=['GET'])
-        def api_id():
+        @app.route('/api/v1/device', methods=['GET'])
+        def api_device_discovery_ip():
             # Check if an ID was provided as part of the URL.
             # If ID is provided, assign it to a variable.
             # If no ID is provided, display an error in the browser.
-            if 'ip' in request.args:
-                ip = int(request.args['id'])
+            if 'discovery_ip' in request.args:
+                ips = request.args['discovery_ip']
+
+                response = dict()
+                for ip in ips:
+                    try:
+                        val = self._scanner.get_device()
+                    except:
+                        pass
             else:
-                return "Error: No id field provided. Please specify an id."
+                return "Error: No discovery_id field provided. Please specify an discovery_id."
 
             # Create an empty list for our results
             results = []
@@ -66,7 +89,13 @@ class NVEServer:
             # Use the jsonify function from Flask to convert our list of
             # Python dictionaries to the JSON format.
             return jsonify(results)
+        
+        @app.route('/shutdown', methods=['GET'])
+        def shutdown():
+            func = request.environ.get('werkzeug.server.shutdown')
+            if func is None:
+                raise RuntimeError('Not running with the Werkzeug Server')
+            func()
+            return 'Server shutting down...'
 
         app.run()
-
-NVEServer.start()

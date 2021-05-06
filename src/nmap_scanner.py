@@ -28,7 +28,7 @@ class NmapScanner:
         self._default_ip = default_ip if default_ip != None else utils.get_my_external_ip()
         self._default_snet_mask = default_snet_mask if default_snet_mask != None else 20
 
-    def _set_defualt(self):
+    def _set_default(self):
         self._search_params["os_search"]["active"] = True
         self._search_params["version_search"]["active"] = True
 
@@ -122,7 +122,8 @@ class NmapScanner:
         return device.get_vulns()
 
 
-n = NmapScanner("10.1.64.0", 28)
-devices, _ = n.run_scan()
-with open("jargon/file.json", "w") as fp:
-    json.dump(devices, fp, cls = DeviceEncoder)
+if __name__ == "__init__":
+    n = NmapScanner("10.1.64.0", 28)
+    devices, _ = n.run_scan()
+    with open("jargon/file.json", "w") as fp:
+        json.dump(devices, fp, cls = DeviceEncoder)
