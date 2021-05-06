@@ -127,7 +127,7 @@ class NmapScanner:
 
 
 if __name__ == "__init__":
-    n = NmapScanner("10.1.64.0", 28)
+    n = NmapScanner("10.0.0.37", 24)
     devices, _ = n.run_scan()
     with open("jargon/file.json", "w") as fp:
         json.dump(devices, fp, cls = DeviceEncoder)
