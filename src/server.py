@@ -33,8 +33,8 @@ class NVEServer:
                                             default_snet_mask=request.form["subnet"])
                 return "OK", 200
             else:
-                data = {'message': "Error: scanner already set up"}
-                return make_response(jsonify(data), 500)
+                data = {'message': "scanner already set up"}
+                return make_response(jsonify(data), 200)
 
 
             data = {'message': 'Created', 'code': 'SUCCESS'}
