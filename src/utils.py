@@ -2,6 +2,7 @@ import json
 import jsonschema
 import os
 import pprint
+import re
 import requests
 
 from cpe import CPE
@@ -83,15 +84,26 @@ def convert_to_cpe23(cpe):
     cpe_elements.insert(1, version)
     return ":".join(cpe_elements)
 
-def cpe_match(cpe_l, cpe_r):
-    cpe_l_23 = CPE(cpe_l) # convert_to_cpe23(cpe_l) if "/" in cpe_l else cpe_l
-    cpe_r_23 = CPE(cpe_r) # convert_to_cpe23(cpe_r) if "/" in cpe_r else cpe_r
+def cpe_match_str(match_str, cpe):
+    match_reg = CPE(match_str).as_fs()
+    cpe23 = CPE(cpe).as_fs()
 
-    # if len(cpe_l_23) < len(cpe_r_23):
-    #     return cpe_r_23.startswith(cpe_l_23)
-    # else:
-    #     return cpe_l_23.startswith(cpe_r_23)
-    return cpe_l_23 == cpe_r_23
+    regex = re.compile(match_reg)
+    return regex.match(cpe23) != None
+
+def cpe_match(cpe_l, cpe_r):
+    cpe23l = CPE(cpe_l)
+    cpe23r = CPE(cpe_r)
+
+    if cpe23l.as_fs().count("*") > cpe23r.as_fs().count("*"):
+        reg = cpe23l.as_fs()
+        s = cpe23r.as_fs()
+    else:
+        reg = cpe23r.as_fs()
+        s = cpe23l.as_fs()
+    
+    regex = re.compile(reg)
+    return regex.match(s) != None
 
 
 def get_version(cpe):
@@ -131,37 +143,9 @@ def cpe_in_list(cpe, cpe_list):
             return True
     return False
 
+def match_str_in_list(match_str, cpe_list):
+    for item in cpe_list:
+        if cpe_match_str(match_str, item):
+            return True
+    return False
 
-def is_vulnerable(cpe_list, config_node):
-    and_node = config_node["operator"] == "AND"
-    negate = config_node["negate"] if "negate" in config_node else False
-    return_val = None
-
-    if "cpe_match" in config_node:
-        for match in config_node:
-            cpe_found = cpe_in_list(match["cpe23Uri"], cpe_list)
-            if cpe_found and not and_node:  # if cpe found and its an or node
-                return_val = True
-                break
-            elif (not cpe_found) and and_node:  # if cpe not found and its an and node
-                return_val = False
-                break
-        if return_val == None:
-            return_val = and_node  # if its an and node, return true; otherwise return false
-
-    elif "children" in config_node:
-        for child in config_node["children"]:
-            is_vuln = is_vulnerable(cpe_in_list, child)
-            if is_vuln and not and_node:
-                return_val = True
-                break
-            elif (not is_vuln) and and_node:
-                return_val = False
-                break
-        if return_val == None:
-            return_val = and_node
-
-    else:
-        raise ValueError("Node needs children or cpe_match")
-
-    return return_val if negate == False else (not return_val)
