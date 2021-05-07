@@ -78,12 +78,12 @@ class NVEServer:
                 ips = request.args['discovery_ip']
 
                 if not isinstance(ips, list):
-                    return device.DeviceEncoder().encode([self._scanner.get_device_vuln(ips)]), 200
+                    return vulnerability.VulnerabilityEncoder().encode([self._scanner.get_device_vuln(ips)]), 200
                 
                 response = dict()
                 for ip in ips:
                     response[ip] = self._scanner.get_device_vuln(ip)
-                return device.DeviceEncoder().encode(response), 200
+                return vulnerability.VulnerabilityEncoder().encode(response), 200
 
             else:
                 data = {'message': "Error: No discovery_id field provided. Please specify an discovery_id."}
