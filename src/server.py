@@ -43,12 +43,14 @@ class NVEServer:
         # A route to return all of the available entries in our catalog.
         @app.route('/api/v1/devices/all', methods=['GET'])
         def api_device_all():
-            try:
-                devices = self._scanner.get_all_devices()
-                return device.DeviceEncoder().encode(devices)
-            except:
-                data = {'message': "Error"}
-                return make_response(jsonify(data), 500)
+            #try:
+            print("getting devices")
+            devices = self._scanner.get_all_devices()
+            print("got devices")
+            return device.DeviceEncoder().encode(devices)
+            # except:
+            #     data = {'message': "Error"}
+            #     return make_response(jsonify(data), 500)
 
         @app.route('/api/v1/device', methods=['GET'])
         def api_device_discovery_ip():
