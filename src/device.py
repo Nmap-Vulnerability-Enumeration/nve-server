@@ -171,7 +171,7 @@ class Device:
         os_cpe = [cpe for (cpe, port) in cpes.items() if port == -1]
         params = {
             "cpeMatchString": os_cpe,
-            "resultsPerPage": 100
+            "resultsPerPage": 500
         }
 
         cves = utils.query_nist_cve(params)
@@ -191,7 +191,8 @@ class Device:
         name_param = ["%s %s" % (service["product"], service["version"])
                       for service in self.tcp_ports.values()]
         params = {
-            "keyword": name_param
+            "keyword": name_param,
+            "cpeMatchString": 
         }
 
         cves = utils.query_nist_cve(params)
