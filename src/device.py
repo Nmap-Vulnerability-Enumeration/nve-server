@@ -1,6 +1,7 @@
 import json
 import src.utils as utils
 
+from cpe import CPE
 
 class Device:
     '''
@@ -185,23 +186,22 @@ class Device:
         return vulns
 
     def _get_service_vulns(self, cpes):
-        if len(self.tcp_ports) == 0:
-            return dict()
-
-        name_param = ["%s %s" % (service["product"], service["version"])
-                      for service in self.tcp_ports.values()]
-        params = {
-            "keyword": name_param,
-            "cpeMatchString": 
-        }
-
-        cves = utils.query_nist_cve(params)
-        if cves == None:
-            return dict()
         vulns = dict()
-        for cve in cves:
-            if cves[cve].is_vulnerable(self):
-                vulns[cve] = cves[cve]
+
+        for service in self.tcp_ports.values():
+            params = dict()
+            params["keyword"] = "%s %s" % (service["product"], service["version"])
+            
+            if len(service["cpe"]) > 0:
+                params["cpeMatchString"] = CPE(service["cpe"]).as_fs()
+
+            cves = utils.query_nist_cve(params)
+            if cves == None:
+                continue
+            
+            for cve in cves:
+                if cves[cve].is_vulnerable(self):
+                    vulns[cve] = cves[cve]
         return vulns
 
 
