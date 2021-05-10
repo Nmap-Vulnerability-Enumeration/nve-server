@@ -76,26 +76,26 @@ def query_nist_cve(params: dict):
     else:
         req.raise_for_status()
 
-
-def convert_to_cpe23(cpe):
-    cpe_elements = cpe.split(":")
-    version = cpe_elements.pop(4) if len(cpe_elements) > 4 else ""
-    cpe_elements[1] = cpe_elements[1][1:]
-    cpe_elements.insert(1, version)
-    return ":".join(cpe_elements)
-
-def cpe_match_str(match_str, cpe):
+def cpe_match_str(match_str: str, cpe: str):
     if cpe == None or match_str == None or len(cpe) == 0 or len(match_str) == 0:
         return False
-    match_reg = CPE(match_str).as_fs()
-    cpe23 = CPE(cpe).as_fs()
+    try:
+        match_reg = CPE(match_str).as_fs()
+        cpe23 = CPE(cpe).as_fs()
+    except:
+        print("Invalid CPE str")
+        return False
 
     regex = re.compile(match_reg)
     return regex.match(cpe23) != None
 
-def cpe_match(cpe_l, cpe_r):
-    cpe23l = CPE(cpe_l)
-    cpe23r = CPE(cpe_r)
+def cpe_match(cpe_l: str, cpe_r: str):
+    try:
+        cpe23l = CPE(cpe_l)
+        cpe23r = CPE(cpe_r)
+    except:
+        print("Invalid CPE str")
+        return False
 
     if cpe23l.as_fs().count("*") > cpe23r.as_fs().count("*"):
         reg = cpe23l.as_fs()
@@ -145,8 +145,8 @@ def cpe_in_list(cpe, cpe_list):
             return True
     return False
 
-def match_str_in_list(match_str, cpe_list):
-    if match_str == None or cpe_list == None or len(match_str) == 0 or len(cpe_list) == 0:
+def match_str_in_list(match_str: str, cpe_list: list):
+    if match_str == None or cpe_list == None or len(match_str) == 0:
         return False
     for item in cpe_list:
         if cpe_match_str(match_str, item):
