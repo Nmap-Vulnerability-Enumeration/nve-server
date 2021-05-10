@@ -160,7 +160,11 @@ class Device:
             cpes = self.get_all_cpes()
 
             vulns = self._get_os_vulns(cpes)
-            vulns.update(self._get_service_vulns(cpes))
+
+            try:
+                vulns.update(self._get_service_vulns(cpes))
+            except:
+                pass
 
             self.vulns = vulns
 
