@@ -85,6 +85,8 @@ def convert_to_cpe23(cpe):
     return ":".join(cpe_elements)
 
 def cpe_match_str(match_str, cpe):
+    if cpe == None or match_str == None or len(cpe) == 0 or len(match_str) == 0:
+        return False
     match_reg = CPE(match_str).as_fs()
     cpe23 = CPE(cpe).as_fs()
 
@@ -144,6 +146,8 @@ def cpe_in_list(cpe, cpe_list):
     return False
 
 def match_str_in_list(match_str, cpe_list):
+    if match_str == None or cpe_list == None or len(match_str) == 0 or len(cpe_list) == 0:
+        return False
     for item in cpe_list:
         if cpe_match_str(match_str, item):
             return True
